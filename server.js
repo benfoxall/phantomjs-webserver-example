@@ -9,3 +9,4 @@ var service = server.listen(port, function(request, response) {
     response.close();
 });
 
+if(service) console.log("server started - http://localhost:" + server.port)
