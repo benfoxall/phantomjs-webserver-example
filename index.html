@@ -1,11 +1,42 @@
 <html>
 <head>
 	<title>PhantomJS webserver example</title>
+	<!-- <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"> -->
+	<style type="text/css">
+		body{margin:0;font-family:Helvetica,Arial,sans-serif;overflow-x:hidden;}
+		form{
+			background: #f5f5f5;
+			padding: 1em;
+			margin:0;
+		}
+		p{
+			font-size: .75em;
+			margin: 0.5em 0;
+		}
+		input{
+			margin-right: 0;
+			background: #fff;
+			font-size: 1.3em;
+			border: none;
+			border-left: 3px solid #08f;
+			padding: .5em;
+			display: inline-block;
+		}
+		a{
+			color:#08f;
+			text-decoration: none
+		}
+		hr{
+			margin:0;
+			border: 2px solid #eee;
+		}
+	</style>
 </head>
 <body>
 	<form method="post">
+		<p>Phantomjs webserver example - <a href="https://github.com/benfoxall/phantomjs-webserver-example/">source on github</a></p>
 		<input type="url" name="url" value="http://www.wikipedia.org/" size="70" required>
-		<input type="submit" name="go">
+		<input type="submit" value="&raquo;">
 	</form>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<script type="text/javascript">
@@ -27,21 +58,21 @@
 
 				
 				var data = $.parseJSON(parts[0]);
-				$('<h2>').text(data.title).appendTo($el);
 				var $ul = $('<ul>');
 				$.each(data.links, function(i,l){
 					$('<a>',{href:l,text:l}).appendTo($('<li>').appendTo($ul));
 				})
 
-				$('<img>',{src:parts[1]}).appendTo($el);
+				$ul.prependTo($el);
+				$('<img>',{src:parts[1]}).prependTo($el);
+				$('<h2>').text(data.title).prependTo($el);
 
-				$ul.appendTo($el);
 
 
 			})
 		});
 
-		$(document).on('click','a', function(e){
+		$(document).on('click','div a', function(e){
 			e.preventDefault();
 			$('input[name=url]').val(this.href).submit();
 			$('body').animate({scrollTop:0});
