@@ -3,12 +3,16 @@ var server = require('webserver').create(),
 	fs     = require('fs'),
 	port   = system.env.PORT || 8080;
 
-server.listen(port, function(request, response) {
+var service = server.listen(port, function(request, response) {
 
 	if(request.method == 'POST'){
+		console.log('--' + request.post.url + '--->' + JSON.stringify(request.post));
+	}
+
+	if(request.method == 'POST' && request.post.url){
 		var url = request.post.url;
-		
-		load(url, function(properties, imageuri){
+
+		go(url, function(properties, imageuri){
 			response.statusCode = 200;
 			response.write(JSON.stringify(properties));	
 			response.write("\n");	
@@ -26,8 +30,11 @@ server.listen(port, function(request, response) {
 
 if(service) console.log("server started - http://localhost:" + server.port);
 
-function load(url, callback){
+function go(url, callback){
+
 	var page = new WebPage();
+	page.clipRect = { top: 0, left: 0, width: 700, height: 400 };
+	page.viewportSize = { width: 700, height: 400 };
 
 	page.onLoadStarted = function () {
 		console.log('loading:' + url);
@@ -43,7 +50,7 @@ function load(url, callback){
 						[].reduce.call(
 							document.querySelectorAll('a'), 
 							function(memo, a){
-								if(link.protocol.indexOf('http') === 0)memo[a.href] = true;
+								if(a.protocol.indexOf('http') === 0) memo[a.href] = true;
 								return memo;
 							}
 						,{})
@@ -55,7 +62,8 @@ function load(url, callback){
 
 		callback(properties,imageuri);
 
-		page.close();
+		if(page.close)
+			page.close();
 	};
   page.open(url);
 

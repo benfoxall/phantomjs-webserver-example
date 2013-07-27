@@ -4,8 +4,43 @@
 </head>
 <body>
 	<form method="post">
-		<input type="url" name="url" required>
+		<input type="url" name="url" value="http://google.com" required>
 		<input type="submit" name="go">
 	</form>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script type="text/javascript">
+
+		// gotcha - mongoose doesn't like a trailing 'utf8' on the content type
+		$.ajaxSetup({contentType:'application/x-www-form-urlencoded'});
+
+		$('form').on('submit', function(e){
+			e.preventDefault();
+			var $form = $(this);
+
+			var $el = $('<div><hr /></div>').insertAfter($form);
+
+			$.post('', $form.serializeArray())
+			.then(function(response){
+
+				// json and image split to lines (FF doesn't like image uris in json)
+				var parts = response.split("\n")
+
+				
+				var data = $.parseJSON(parts[0]);
+				$('<h2>').text(data.title).appendTo($el);
+				var $ul = $('<ul>');
+				$.each(data.links, function(i,l){
+					$('<li>').text(l).appendTo($ul);
+				})
+
+				$('<img>',{src:parts[1]}).appendTo($el);
+
+				$ul.appendTo($el);
+
+
+			})
+
+		})
+	</script>
 </body>
 </html>
