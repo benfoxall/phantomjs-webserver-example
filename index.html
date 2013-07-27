@@ -30,7 +30,7 @@
 				$('<h2>').text(data.title).appendTo($el);
 				var $ul = $('<ul>');
 				$.each(data.links, function(i,l){
-					$('<li>').text(l).appendTo($ul);
+					$('<a>',{href:l,text:l}).appendTo($('<li>').appendTo($ul));
 				})
 
 				$('<img>',{src:parts[1]}).appendTo($el);
@@ -39,8 +39,14 @@
 
 
 			})
+		});
 
+		$(document).on('click','a', function(e){
+			e.preventDefault();
+			$('input[name=url]').val(this.href).submit();
+			$('body').animate({scrollTop:0});
 		})
+
 	</script>
 </body>
 </html>
