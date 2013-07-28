@@ -5,14 +5,10 @@ var server = require('webserver').create(),
 
 var service = server.listen(port, function(request, response) {
 
-	if(request.method == 'POST'){
-		console.log('--' + request.post.url + '--->' + JSON.stringify(request.post));
-	}
-
 	if(request.method == 'POST' && request.post.url){
 		var url = request.post.url;
 
-		go(url, function(properties, imageuri){
+		request_page(url, function(properties, imageuri){
 			response.statusCode = 200;
 			response.write(JSON.stringify(properties));	
 			response.write("\n");	
@@ -30,7 +26,7 @@ var service = server.listen(port, function(request, response) {
 
 if(service) console.log("server started - http://localhost:" + server.port);
 
-function go(url, callback){
+function request_page(url, callback){
 
 	var page = new WebPage();
 	page.clipRect = { top: 0, left: 0, width: 700, height: 400 };
