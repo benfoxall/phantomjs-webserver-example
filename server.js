@@ -62,8 +62,7 @@ function go(url, callback){
 
 		callback(properties,imageuri);
 
-		if(page.close)
-			page.close();
+		page.close();
 	};
   page.open(url);
 
