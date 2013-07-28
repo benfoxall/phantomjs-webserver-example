@@ -58,11 +58,13 @@ function request_page(url, callback){
 				)
 		});
 
-		var imageuri = 'data:image/png;base64,' + page.renderBase64('png');
+		setTimeout(function(){
+			var imageuri = 'data:image/png;base64,' + page.renderBase64('png');
 
-		callback(properties,imageuri);
+			callback(properties,imageuri);
 
-		page.close();
+			page.close();
+		},100)
 	};
 
 	page.open(url);
