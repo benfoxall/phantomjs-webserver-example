@@ -39,19 +39,22 @@ function request_page(url, callback){
 	page.onLoadFinished = function (status) {
 		console.log('loaded:' + url);
 
-		var properties = page.evaluate(function () {
-			return {
-				title:document.title,
-				links:Object.keys(
-						[].reduce.call(
-							document.querySelectorAll('a'), 
-							function(memo, a){
-								if(a.protocol.indexOf('http') === 0) memo[a.href] = true;
-								return memo;
-							}
-						,{})
-					)
-			}
+		var properties = {};
+
+		properties.title = page.evaluate(function () {
+			return document.title
+		});
+
+		properties.links = page.evaluate(function () {
+			return Object.keys(
+					[].reduce.call(
+						document.querySelectorAll('a'), 
+						function(memo, a){
+							if(a.protocol.indexOf('http') === 0) memo[a.href] = true;
+							return memo;
+						}
+					,{})
+				)
 		});
 
 		var imageuri = 'data:image/png;base64,' + page.renderBase64('png');
@@ -60,6 +63,6 @@ function request_page(url, callback){
 
 		page.close();
 	};
-  page.open(url);
 
+	page.open(url);
 }
