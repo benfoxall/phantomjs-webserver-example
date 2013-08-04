@@ -36,6 +36,7 @@
 					</li>
 					{{/each}}
 				</ul>
+				<div class="pie-chart"></div>
 			{{/if}}
 		</div>
 
@@ -73,6 +74,23 @@
 
 				$el.html(template(data));
 
+				if(chartsLoaded){
+
+					data.meta.link_areas.unshift(['URL', 'Area'])
+
+					var datatable = google.visualization.arrayToDataTable(data.meta.link_areas);
+
+					var options = {
+						title:"Links by area",
+						legend:{position:'none'},
+						pieSliceText:'none'
+					};
+
+					var chart = new google.visualization.PieChart($el.find('.pie-chart').get(0));
+					chart.draw(datatable, options);
+
+				}
+
 			})
 		}).submit();
 
@@ -82,5 +100,15 @@
 			$('body').animate({scrollTop:0});
 		});
 	</script>
+
+
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    	var chartsLoaded;
+		google.load("visualization", "1", {packages:["corechart"]});
+		google.setOnLoadCallback(function(){
+			chartsLoaded = true;
+		});
+    </script>
 </body>
 </html>

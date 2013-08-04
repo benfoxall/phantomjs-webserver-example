@@ -58,6 +58,25 @@ function request_page(url, callback){
 				)
 		});
 
+		properties.link_areas = page.evaluate(function () {
+			var sizes = [].reduce.call(document.querySelectorAll('a'), function(memo, a){
+				var bb = a.getBoundingClientRect(),
+					area = bb.width * bb.height,
+					href = a.getAttribute('href');
+			 
+				// update the map
+				if(area){
+					memo[href] = (memo[href] || 0) + area;
+				}
+			 
+				return memo;
+			},{});
+
+			return Object.keys(sizes).map(function(url){
+				return [url, sizes[url]];
+			});
+		})
+
 		setTimeout(function(){
 			var imageuri = 'data:image/png;base64,' + page.renderBase64('png');
 
